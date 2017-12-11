@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="purple.cas.mapper.UserMapper" >
+
+    <select id="getAll" resultType="purple.cas.model.User"  >
+        SELECT id, user_code, user_name, gmt_create, gmt_modify FROM cas_user
+    </select>
+</mapper>
