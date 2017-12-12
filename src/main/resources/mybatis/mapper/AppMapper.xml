@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="purple.cas.mapper.AppMapper" >
+
+    <resultMap type="purple.cas.model.App" id="BaseResultMap">
+        <result property="id" column="id" />
+        <result property="appCode" column="app_code" />
+        <result property="appName" column="app_name" />
+        <result property="redirectUri" column="redirect_uri" />
+        <result property="createTime" column="create_time" jdbcType="DATE"/>
+        <result property="modifyTime" column="modify_time" jdbcType="DATE"/>
+    </resultMap>
+
+    <sql id="Tabel_Name">
+        sys_app
+    </sql>
+
+    <sql id="Base_Column_List" >
+        id,app_code,app_name,redirect_uri,create_time,modify_time
+    </sql>
+
+    <select id="queryById" resultMap="BaseResultMap" parameterType="String">
+        select
+        <include refid="Base_Column_List" />
+        from
+        <include refid="Tabel_Name" />
+        where
+        id = #{id}
+    </select>
+
+</mapper>     

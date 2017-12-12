@@ -1,25 +1,24 @@
 package purple.cas.model;
 
-
-
 import java.time.LocalDateTime;
 
-public class User {
+/**
+ * Created by yujie on 2017/12/12.
+ */
+public class App {
+
 
     private String id;
 
-    private String userCode;
+    private String appCode;
 
-    private String userName;
+    private String appName;
+
+    private String redirectUri;
 
     private LocalDateTime createTime;
 
     private  LocalDateTime modifyTime;
-
-
-
-
-
 
     public LocalDateTime getCreateTime() {
         return createTime;
@@ -45,19 +44,27 @@ public class User {
         this.id = id;
     }
 
-    public String getUserCode() {
-        return userCode;
+    public String getAppCode() {
+        return appCode;
     }
 
-    public void setUserCode(String userCode) {
-        this.userCode = userCode;
+    public void setAppCode(String appCode) {
+        this.appCode = appCode;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getAppName() {
+        return appName;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setAppName(String appName) {
+        this.appName = appName;
+    }
+
+    public String getRedirectUri() {
+        return redirectUri;
+    }
+
+    public void setRedirectUri(String redirectUri) {
+        this.redirectUri = redirectUri;
     }
 }

@@ -8,10 +8,10 @@
     <!-- Result Map-->
     <resultMap type="purple.cas.model.User" id="BaseResultMap">
         <result property="id" column="id" />
-        <result property="name" column="name" />
-        <result property="sex" column="sex" />
-        <result property="birs" column="birs" jdbcType="TIMESTAMP"/>
-        <result property="message" column="message" jdbcType="CLOB" javaType = "java.lang.String"  typeHandler ="com.southgis.scout.demo.OracleClobTypeHandler"/>
+        <result property="userCode" column="user_code" />
+        <result property="userName" column="user_name" />
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="modifyTime" column="modify_time" jdbcType="TIMESTAMP"/>
     </resultMap>
 
     <!-- 表名-->
@@ -21,7 +21,7 @@
 
     <!-- 表中所有列 -->
     <sql id="Base_Column_List" >
-        id,name,sex,birs,message
+        id,user_code,user_name,create_time,modify_time
     </sql>
 
     <!-- 查询条件 -->
