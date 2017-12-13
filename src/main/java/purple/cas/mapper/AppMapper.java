@@ -7,5 +7,5 @@ import purple.cas.model.App;
  */
 public interface AppMapper {
 
-    App queryById(String id);
+    App getById(String id);
 }

@@ -21,7 +21,7 @@
         id,app_code,app_name,redirect_uri,create_time,modify_time
     </sql>
 
-    <select id="queryById" resultMap="BaseResultMap" parameterType="String">
+    <select id="getById" resultMap="BaseResultMap" parameterType="String">
         select
         <include refid="Base_Column_List" />
         from
