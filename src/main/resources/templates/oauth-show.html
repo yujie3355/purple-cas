@@ -5,8 +5,23 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <body>
-<p th:text="'Hello, ' + ${client_id} + '!qqq'" />
-<br/>
-<p th:text="'Hello, ' + ${redirect_uri} + '!uuu'" />
+<!--<p th:text="'Hello, ' + ${client_id} + '!qqq'" />-->
+<!--<br/>-->
+<!--<p th:text="'Hello, ' + ${redirect_uri} + '!uuu'" />-->
+
+<form action="login" method="post">
+    <span>帐号：</span><input type="text" name="user_name" /><br/>
+    <span>密码：</span><input type="text" name="user_login" /><br/>
+    <span th:text="${message}"></span>
+
+    <input type="hidden" name="client_id" th:value="${client_id}" />
+    <input type="hidden" name="redirect_uri" th:value="${redirect_uri}" />
+    <input type="hidden" name="response_type" th:value="${response_type}" />
+    <input type="hidden" name="state" th:value="${state}" />
+
+
+
+    <input type="submit" value="保存" />
+</form>
 </body>
 </html>

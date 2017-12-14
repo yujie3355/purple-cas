@@ -10,8 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import purple.cas.mapper.AppMapper;
-import purple.cas.model.App;
+import org.springframework.web.servlet.ModelAndView;
 import purple.cas.model.AuthToken;
 import purple.cas.service.OAuthService;
 
@@ -35,40 +34,80 @@ public class OAuthController {
 
 
     @RequestMapping(value = "/authorize", method = RequestMethod.GET)
-    @ResponseBody
-    public void authorize(@RequestParam(value="client_id", required=true, defaultValue="1234567890") String clientId,
+    public String authorize(@RequestParam(value="client_id", required=true, defaultValue="1234567890") String clientId,
                           @RequestParam(value="redirect_uri", required=true, defaultValue="http://localhost/test") String redirectUri,
-                          @RequestParam(value="response_type", required=true, defaultValue="code") String responseType,
-                          @RequestParam(value="state", required=true, defaultValue="code") String state)
-    {
+                          @RequestParam(value="response_type", required=true, defaultValue="response_type") String responseType,
+                          @RequestParam(value="state", required=true, defaultValue="state") String state) throws Exception {
 
-        String serverName = request.getServerName();
-        logger.info(serverName+"1");
-
-
-
-        //http://localhost:8080/oauth/authorize?client_id=1&redirect_uri=2&response_type=3&state=4
-
+        String url = oAuthService.authorize(clientId, redirectUri, responseType, state);
+        return  url;
+        //String serverName = request.getServerName();
     }
 
     @RequestMapping(value = "/show", method = RequestMethod.GET)
     public String show(@RequestParam(value="client_id", required=true, defaultValue="1234567890") String clientId,
-                       @RequestParam(value="redirect_uri", required=true, defaultValue="http://localhost/test") String redirectUri,
-                       @RequestParam(value="response_type", required=true, defaultValue="code") String responseType,
+                       @RequestParam(value="redirect_uri", required=true) String redirectUri,
+                       @RequestParam(value="response_type", required=true, defaultValue="response_type") String responseType,
                        @RequestParam(value="state", required=true, defaultValue="code") String state,
                        Model model) {
 
 
-        App app = oAuthService.show(clientId);
+        //App app = oAuthService.show(clientId);
 
 
 
 
-        model.addAttribute("client_id",app.getId());
-        model.addAttribute("redirect_uri",app.getRedirectUri());
+        //model.addAttribute("client_id",app.getId());
+        model.addAttribute("client_id",clientId);
+        model.addAttribute("redirect_uri",redirectUri);
+        model.addAttribute("response_type",responseType);
+        model.addAttribute("state",state);
+
         //model.addAttribute(app);
         return "oauth-show";
     }
+
+
+    @RequestMapping(value = "/login")
+    public String login(@RequestParam(value="user_name", required=true, defaultValue="1234567890") String userName,
+                        @RequestParam(value="user_login", required=true, defaultValue="http://localhost/test") String userLogin,
+                        @RequestParam(value="client_id", required=true, defaultValue="1234567890") String clientId,
+                        @RequestParam(value="redirect_uri", required=true) String redirectUri,
+                        @RequestParam(value="response_type", required=true, defaultValue="response_type") String responseType,
+                        @RequestParam(value="state", required=true, defaultValue="code") String state,
+                        Model model) throws Exception {
+
+
+        //App app = oAuthService.show(clientId);
+
+        String url = oAuthService.authorize(clientId, redirectUri, responseType, state);
+
+        String clientUrl = oAuthService.validate(userName, userLogin, redirectUri, state);
+
+
+        if(userName.equals("1") &&  userLogin.equals("1")) {
+            return "redirect:" + redirectUri;
+        }
+        else
+        {
+
+            model.addAttribute("client_id",clientId);
+            model.addAttribute("redirect_uri",redirectUri);
+            model.addAttribute("response_type",responseType);
+            model.addAttribute("state",state);
+            model.addAttribute("message","password error");
+
+            //model.addAttribute(app);
+            return "oauth-show";
+
+            //return  url;
+        }
+    }
+
+
+
+
+
 
     @RequestMapping(value = "/token", method = RequestMethod.GET)
     @ResponseBody
@@ -78,6 +117,10 @@ public class OAuthController {
                            @RequestParam(value="grant_type", required=true, defaultValue="grant_type") String state,
                            @RequestParam(value="code", required=true, defaultValue="code") String code)
     {
+
+
+        oAuthService.token(clientId,redirectUri,responseType, state, code);
+
 
         AuthToken token = new AuthToken();
         return token;

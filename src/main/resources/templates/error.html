@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8" />
+    <title>purple-cas-error</title>
+
+</head>
+<body>
+<h3>Error Handler</h3>
+<table border="1" cellpadding="4" cellspacing="8" width="100%">
+    <tr>
+        <td>timestamp</td>
+        <td th:text="${#dates.format(timestamp,'yyyy-MM-dd HH:mm:ss')}"></td>
+    </tr>
+    <tr>
+        <td>status</td>
+        <td th:text="${status}"></td>
+    </tr>
+    <tr>
+        <td>error</td>
+        <td th:text="${error}"></td>
+    </tr>
+    <tr>
+        <td>exception</td>
+        <td th:text="${exception}"></td>
+    </tr>
+    <tr>
+        <td>message</td>
+        <td><strong th:text="${message}"></strong></td>
+    </tr>
+    <tr>
+        <td>trace</td>
+        <td th:text="${trace}"></td>
+    </tr>
+    <tr>
+        <td>path</td>
+        <td th:text="${path}"></td>
+    </tr>
+
+</table>
+
+<h3>Please Contact Administrator. QQ:30363749.</h3>
+</body>
+</html>
