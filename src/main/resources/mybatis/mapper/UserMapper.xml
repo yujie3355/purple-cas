@@ -1,116 +1,488 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<!--这块等于dao接口的实现  namespace必须和接口的类路径一样-->
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="purple.cas.mapper.UserMapper" >
-
-    <!-- Result Map-->
-    <resultMap type="purple.cas.model.User" id="BaseResultMap">
-        <result property="id" column="id" />
-        <result property="userCode" column="user_code" />
-        <result property="userName" column="user_name" />
-        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
-        <result property="modifyTime" column="modify_time" jdbcType="TIMESTAMP"/>
-    </resultMap>
-
-    <!-- 表名-->
-    <sql id="Tabel_Name">
-        cas_user
-    </sql>
-
-    <!-- 表中所有列 -->
-    <sql id="Base_Column_List" >
-        id,user_code,user_name,create_time,modify_time
-    </sql>
-
-    <!-- 查询条件 -->
-    <sql id="Example_Where_Clause">
-        where 1=1
-        <trim suffixOverrides=",">
-            <if test="id != null">
-                and id = #{id}
-            </if>
-            <if test="name != null and name != ''">
-                and name like concat(concat('%', '${name}'), '%')
-            </if>
-            <if test="sex != null and sex != ''">
-                and sex like concat(concat('%', '${sex}'), '%')
-            </if>
-            <if test="birs != null">
-                and birs = #{birs}
-            </if>
-            <if test="message != null">
-                and message = #{message}
-            </if>
-        </trim>
-    </sql>
-
-    <!-- 下面的id都和接口UsersMapper中的方法名一样-->
-
-    <!-- 1.新增记录 -->
-    <insert id="add" parameterType="Object" >
-        <selectKey resultType="int" order="BEFORE" keyProperty="id">
-            select seq_t_users_id.nextval as id from dual
-        </selectKey>
-        insert into t_users(id,name,sex,birs,message) values(#{id},#{name},#{sex},#{birs},#{message,jdbcType=CLOB})
-    </insert>
-
-    <!-- 2.根据id修改记录-->
-    <update id="update" parameterType="Object" >
-        update t_users set name=#{name},sex=#{sex},birs=#{birs},message=#{message} where id=#{id}
-    </update>
-
-    <!-- 3.只修改不为空的字段 -->
-    <update id="updateBySelective" parameterType="Object" >
-        update t_users set
-        <trim  suffixOverrides="," >
-            <if test="name != null  and name != '' ">
-                name=#{name},
-            </if>
-            <if test="sex != null  and sex != '' ">
-                sex=#{sex},
-            </if>
-            <if test="birs != null  ">
-                birs=#{birs},
-            </if>
-            <if test="message != null  and message != '' ">
-                message=#{message},
-            </if>
-        </trim> where id=#{id}
-    </update>
-
-    <!-- 4.根据id进行删除 -->
-    <delete id="delete" parameterType="Object">
-        delete from t_users where id = #{id}
-    </delete>
-
-    <!-- 5.根据id查询 -->
-    <select id="queryById" resultMap="BaseResultMap" parameterType="Object">
-        select
-        <include refid="Base_Column_List" />
-        from t_users where id = #{id}
-    </select>
-
-    <!-- 6.查询列表，只查询不为空的字段 -->
-    <select id="queryBySelective" resultMap="BaseResultMap" parameterType="Object">
-        select
-        <include refid="Base_Column_List" />
-        from t_users
-        <include refid="Example_Where_Clause" />
-    </select>
-
-    <!-- 7.列表总数 -->
-    <select id="queryByCount" resultType="java.lang.Integer" parameterType="Object">
-        select count(1) from t_users
-        <include refid="Example_Where_Clause" />
-    </select>
-
-    <!-- 8.查询列表 -->
-    <select id="queryByList" resultMap="BaseResultMap" parameterType="Object">
-        select
-        <include refid="Base_Column_List" />
-        from t_users
-        <include refid="Example_Where_Clause"/>
-    </select>
-</mapper>     
+  <resultMap id="BaseResultMap" type="purple.cas.model.User" >
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="STATUS" property="status" jdbcType="VARCHAR" />
+    <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="CREATOR_ID" property="creatorId" jdbcType="VARCHAR" />
+    <result column="CREATOR_NAME" property="creatorName" jdbcType="VARCHAR" />
+    <result column="MODIFY_TIME" property="modifyTime" jdbcType="TIMESTAMP" />
+    <result column="MODIFIER_ID" property="modifierId" jdbcType="VARCHAR" />
+    <result column="MODIFIER_NAME" property="modifierName" jdbcType="VARCHAR" />
+    <result column="IS_APPROVE" property="isApprove" jdbcType="VARCHAR" />
+    <result column="IS_ACTIVE" property="isActive" jdbcType="VARCHAR" />
+    <result column="APPROVE_TIME" property="approveTime" jdbcType="TIMESTAMP" />
+    <result column="APPROVER_ID" property="approverId" jdbcType="VARCHAR" />
+    <result column="APPROVER_NAME" property="approverName" jdbcType="VARCHAR" />
+    <result column="USER_CODE" property="userCode" jdbcType="VARCHAR" />
+    <result column="USER_NAME" property="userName" jdbcType="VARCHAR" />
+    <result column="USER_PWD" property="userPwd" jdbcType="VARCHAR" />
+    <result column="USER_REAL" property="userReal" jdbcType="VARCHAR" />
+    <result column="USER_TYPE" property="userType" jdbcType="VARCHAR" />
+    <result column="GENDER" property="gender" jdbcType="VARCHAR" />
+    <result column="ORG_ID" property="orgId" jdbcType="VARCHAR" />
+    <result column="ORG_NAME" property="orgName" jdbcType="VARCHAR" />
+    <result column="DEPT_ID" property="deptId" jdbcType="VARCHAR" />
+    <result column="DEPT_NAME" property="deptName" jdbcType="VARCHAR" />
+    <result column="MAIL" property="mail" jdbcType="VARCHAR" />
+    <result column="TEL" property="tel" jdbcType="VARCHAR" />
+    <result column="MOBILE" property="mobile" jdbcType="VARCHAR" />
+    <result column="CER_TYPE" property="cerType" jdbcType="VARCHAR" />
+    <result column="CER_NO" property="cerNo" jdbcType="VARCHAR" />
+    <result column="CIQ_CODE" property="ciqCode" jdbcType="VARCHAR" />
+    <result column="CUSTOMS_CODE" property="customsCode" jdbcType="VARCHAR" />
+    <result column="CNCA_CODE" property="cncaCode" jdbcType="VARCHAR" />
+    <result column="TECH_REG_CODE" property="techRegCode" jdbcType="VARCHAR" />
+    <result column="NET_TYPE" property="netType" jdbcType="VARCHAR" />
+    <result column="NATIONALITY" property="nationality" jdbcType="VARCHAR" />
+    <result column="BIRTH_DATE" property="birthDate" jdbcType="TIMESTAMP" />
+    <result column="ADDRESS" property="address" jdbcType="VARCHAR" />
+    <result column="PICTURE_ID" property="pictureId" jdbcType="VARCHAR" />
+    <result column="CIQ_ORIGIN_NO" property="ciqOriginNo" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, STATUS, CREATE_TIME, CREATOR_ID, CREATOR_NAME, MODIFY_TIME, MODIFIER_ID, MODIFIER_NAME, 
+    IS_APPROVE, IS_ACTIVE, APPROVE_TIME, APPROVER_ID, APPROVER_NAME, USER_CODE, USER_NAME, 
+    USER_PWD, USER_REAL, USER_TYPE, GENDER, ORG_ID, ORG_NAME, DEPT_ID, DEPT_NAME, MAIL, 
+    TEL, MOBILE, CER_TYPE, CER_NO, CIQ_CODE, CUSTOMS_CODE, CNCA_CODE, TECH_REG_CODE, 
+    NET_TYPE, NATIONALITY, BIRTH_DATE, ADDRESS, PICTURE_ID, CIQ_ORIGIN_NO
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from EIP_PROJ.CAS_USER
+    where ID = #{id,jdbcType=VARCHAR}
+  </select>
+  <select id="selectByUserCode" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from EIP_PROJ.CAS_USER
+    where USER_CODE = #{USER_CODE,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from EIP_PROJ.CAS_USER
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="purple.cas.model.User" >
+    insert into EIP_PROJ.CAS_USER (ID, STATUS, CREATE_TIME, 
+      CREATOR_ID, CREATOR_NAME, MODIFY_TIME, 
+      MODIFIER_ID, MODIFIER_NAME, IS_APPROVE, 
+      IS_ACTIVE, APPROVE_TIME, APPROVER_ID, 
+      APPROVER_NAME, USER_CODE, USER_NAME, 
+      USER_PWD, USER_REAL, USER_TYPE, 
+      GENDER, ORG_ID, ORG_NAME, 
+      DEPT_ID, DEPT_NAME, MAIL, 
+      TEL, MOBILE, CER_TYPE, 
+      CER_NO, CIQ_CODE, CUSTOMS_CODE, 
+      CNCA_CODE, TECH_REG_CODE, NET_TYPE, 
+      NATIONALITY, BIRTH_DATE, ADDRESS, 
+      PICTURE_ID, CIQ_ORIGIN_NO)
+    values (#{id,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{creatorId,jdbcType=VARCHAR}, #{creatorName,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP}, 
+      #{modifierId,jdbcType=VARCHAR}, #{modifierName,jdbcType=VARCHAR}, #{isApprove,jdbcType=VARCHAR}, 
+      #{isActive,jdbcType=VARCHAR}, #{approveTime,jdbcType=TIMESTAMP}, #{approverId,jdbcType=VARCHAR}, 
+      #{approverName,jdbcType=VARCHAR}, #{userCode,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, 
+      #{userPwd,jdbcType=VARCHAR}, #{userReal,jdbcType=VARCHAR}, #{userType,jdbcType=VARCHAR}, 
+      #{gender,jdbcType=VARCHAR}, #{orgId,jdbcType=VARCHAR}, #{orgName,jdbcType=VARCHAR}, 
+      #{deptId,jdbcType=VARCHAR}, #{deptName,jdbcType=VARCHAR}, #{mail,jdbcType=VARCHAR}, 
+      #{tel,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, #{cerType,jdbcType=VARCHAR}, 
+      #{cerNo,jdbcType=VARCHAR}, #{ciqCode,jdbcType=VARCHAR}, #{customsCode,jdbcType=VARCHAR}, 
+      #{cncaCode,jdbcType=VARCHAR}, #{techRegCode,jdbcType=VARCHAR}, #{netType,jdbcType=VARCHAR}, 
+      #{nationality,jdbcType=VARCHAR}, #{birthDate,jdbcType=TIMESTAMP}, #{address,jdbcType=VARCHAR}, 
+      #{pictureId,jdbcType=VARCHAR}, #{ciqOriginNo,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="purple.cas.model.User" >
+    insert into EIP_PROJ.CAS_USER
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="status != null" >
+        STATUS,
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME,
+      </if>
+      <if test="creatorId != null" >
+        CREATOR_ID,
+      </if>
+      <if test="creatorName != null" >
+        CREATOR_NAME,
+      </if>
+      <if test="modifyTime != null" >
+        MODIFY_TIME,
+      </if>
+      <if test="modifierId != null" >
+        MODIFIER_ID,
+      </if>
+      <if test="modifierName != null" >
+        MODIFIER_NAME,
+      </if>
+      <if test="isApprove != null" >
+        IS_APPROVE,
+      </if>
+      <if test="isActive != null" >
+        IS_ACTIVE,
+      </if>
+      <if test="approveTime != null" >
+        APPROVE_TIME,
+      </if>
+      <if test="approverId != null" >
+        APPROVER_ID,
+      </if>
+      <if test="approverName != null" >
+        APPROVER_NAME,
+      </if>
+      <if test="userCode != null" >
+        USER_CODE,
+      </if>
+      <if test="userName != null" >
+        USER_NAME,
+      </if>
+      <if test="userPwd != null" >
+        USER_PWD,
+      </if>
+      <if test="userReal != null" >
+        USER_REAL,
+      </if>
+      <if test="userType != null" >
+        USER_TYPE,
+      </if>
+      <if test="gender != null" >
+        GENDER,
+      </if>
+      <if test="orgId != null" >
+        ORG_ID,
+      </if>
+      <if test="orgName != null" >
+        ORG_NAME,
+      </if>
+      <if test="deptId != null" >
+        DEPT_ID,
+      </if>
+      <if test="deptName != null" >
+        DEPT_NAME,
+      </if>
+      <if test="mail != null" >
+        MAIL,
+      </if>
+      <if test="tel != null" >
+        TEL,
+      </if>
+      <if test="mobile != null" >
+        MOBILE,
+      </if>
+      <if test="cerType != null" >
+        CER_TYPE,
+      </if>
+      <if test="cerNo != null" >
+        CER_NO,
+      </if>
+      <if test="ciqCode != null" >
+        CIQ_CODE,
+      </if>
+      <if test="customsCode != null" >
+        CUSTOMS_CODE,
+      </if>
+      <if test="cncaCode != null" >
+        CNCA_CODE,
+      </if>
+      <if test="techRegCode != null" >
+        TECH_REG_CODE,
+      </if>
+      <if test="netType != null" >
+        NET_TYPE,
+      </if>
+      <if test="nationality != null" >
+        NATIONALITY,
+      </if>
+      <if test="birthDate != null" >
+        BIRTH_DATE,
+      </if>
+      <if test="address != null" >
+        ADDRESS,
+      </if>
+      <if test="pictureId != null" >
+        PICTURE_ID,
+      </if>
+      <if test="ciqOriginNo != null" >
+        CIQ_ORIGIN_NO,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creatorId != null" >
+        #{creatorId,jdbcType=VARCHAR},
+      </if>
+      <if test="creatorName != null" >
+        #{creatorName,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierId != null" >
+        #{modifierId,jdbcType=VARCHAR},
+      </if>
+      <if test="modifierName != null" >
+        #{modifierName,jdbcType=VARCHAR},
+      </if>
+      <if test="isApprove != null" >
+        #{isApprove,jdbcType=VARCHAR},
+      </if>
+      <if test="isActive != null" >
+        #{isActive,jdbcType=VARCHAR},
+      </if>
+      <if test="approveTime != null" >
+        #{approveTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="approverId != null" >
+        #{approverId,jdbcType=VARCHAR},
+      </if>
+      <if test="approverName != null" >
+        #{approverName,jdbcType=VARCHAR},
+      </if>
+      <if test="userCode != null" >
+        #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null" >
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="userPwd != null" >
+        #{userPwd,jdbcType=VARCHAR},
+      </if>
+      <if test="userReal != null" >
+        #{userReal,jdbcType=VARCHAR},
+      </if>
+      <if test="userType != null" >
+        #{userType,jdbcType=VARCHAR},
+      </if>
+      <if test="gender != null" >
+        #{gender,jdbcType=VARCHAR},
+      </if>
+      <if test="orgId != null" >
+        #{orgId,jdbcType=VARCHAR},
+      </if>
+      <if test="orgName != null" >
+        #{orgName,jdbcType=VARCHAR},
+      </if>
+      <if test="deptId != null" >
+        #{deptId,jdbcType=VARCHAR},
+      </if>
+      <if test="deptName != null" >
+        #{deptName,jdbcType=VARCHAR},
+      </if>
+      <if test="mail != null" >
+        #{mail,jdbcType=VARCHAR},
+      </if>
+      <if test="tel != null" >
+        #{tel,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null" >
+        #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="cerType != null" >
+        #{cerType,jdbcType=VARCHAR},
+      </if>
+      <if test="cerNo != null" >
+        #{cerNo,jdbcType=VARCHAR},
+      </if>
+      <if test="ciqCode != null" >
+        #{ciqCode,jdbcType=VARCHAR},
+      </if>
+      <if test="customsCode != null" >
+        #{customsCode,jdbcType=VARCHAR},
+      </if>
+      <if test="cncaCode != null" >
+        #{cncaCode,jdbcType=VARCHAR},
+      </if>
+      <if test="techRegCode != null" >
+        #{techRegCode,jdbcType=VARCHAR},
+      </if>
+      <if test="netType != null" >
+        #{netType,jdbcType=VARCHAR},
+      </if>
+      <if test="nationality != null" >
+        #{nationality,jdbcType=VARCHAR},
+      </if>
+      <if test="birthDate != null" >
+        #{birthDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="pictureId != null" >
+        #{pictureId,jdbcType=VARCHAR},
+      </if>
+      <if test="ciqOriginNo != null" >
+        #{ciqOriginNo,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="purple.cas.model.User" >
+    update EIP_PROJ.CAS_USER
+    <set >
+      <if test="status != null" >
+        STATUS = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creatorId != null" >
+        CREATOR_ID = #{creatorId,jdbcType=VARCHAR},
+      </if>
+      <if test="creatorName != null" >
+        CREATOR_NAME = #{creatorName,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        MODIFY_TIME = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierId != null" >
+        MODIFIER_ID = #{modifierId,jdbcType=VARCHAR},
+      </if>
+      <if test="modifierName != null" >
+        MODIFIER_NAME = #{modifierName,jdbcType=VARCHAR},
+      </if>
+      <if test="isApprove != null" >
+        IS_APPROVE = #{isApprove,jdbcType=VARCHAR},
+      </if>
+      <if test="isActive != null" >
+        IS_ACTIVE = #{isActive,jdbcType=VARCHAR},
+      </if>
+      <if test="approveTime != null" >
+        APPROVE_TIME = #{approveTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="approverId != null" >
+        APPROVER_ID = #{approverId,jdbcType=VARCHAR},
+      </if>
+      <if test="approverName != null" >
+        APPROVER_NAME = #{approverName,jdbcType=VARCHAR},
+      </if>
+      <if test="userCode != null" >
+        USER_CODE = #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null" >
+        USER_NAME = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="userPwd != null" >
+        USER_PWD = #{userPwd,jdbcType=VARCHAR},
+      </if>
+      <if test="userReal != null" >
+        USER_REAL = #{userReal,jdbcType=VARCHAR},
+      </if>
+      <if test="userType != null" >
+        USER_TYPE = #{userType,jdbcType=VARCHAR},
+      </if>
+      <if test="gender != null" >
+        GENDER = #{gender,jdbcType=VARCHAR},
+      </if>
+      <if test="orgId != null" >
+        ORG_ID = #{orgId,jdbcType=VARCHAR},
+      </if>
+      <if test="orgName != null" >
+        ORG_NAME = #{orgName,jdbcType=VARCHAR},
+      </if>
+      <if test="deptId != null" >
+        DEPT_ID = #{deptId,jdbcType=VARCHAR},
+      </if>
+      <if test="deptName != null" >
+        DEPT_NAME = #{deptName,jdbcType=VARCHAR},
+      </if>
+      <if test="mail != null" >
+        MAIL = #{mail,jdbcType=VARCHAR},
+      </if>
+      <if test="tel != null" >
+        TEL = #{tel,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null" >
+        MOBILE = #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="cerType != null" >
+        CER_TYPE = #{cerType,jdbcType=VARCHAR},
+      </if>
+      <if test="cerNo != null" >
+        CER_NO = #{cerNo,jdbcType=VARCHAR},
+      </if>
+      <if test="ciqCode != null" >
+        CIQ_CODE = #{ciqCode,jdbcType=VARCHAR},
+      </if>
+      <if test="customsCode != null" >
+        CUSTOMS_CODE = #{customsCode,jdbcType=VARCHAR},
+      </if>
+      <if test="cncaCode != null" >
+        CNCA_CODE = #{cncaCode,jdbcType=VARCHAR},
+      </if>
+      <if test="techRegCode != null" >
+        TECH_REG_CODE = #{techRegCode,jdbcType=VARCHAR},
+      </if>
+      <if test="netType != null" >
+        NET_TYPE = #{netType,jdbcType=VARCHAR},
+      </if>
+      <if test="nationality != null" >
+        NATIONALITY = #{nationality,jdbcType=VARCHAR},
+      </if>
+      <if test="birthDate != null" >
+        BIRTH_DATE = #{birthDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="address != null" >
+        ADDRESS = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="pictureId != null" >
+        PICTURE_ID = #{pictureId,jdbcType=VARCHAR},
+      </if>
+      <if test="ciqOriginNo != null" >
+        CIQ_ORIGIN_NO = #{ciqOriginNo,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="purple.cas.model.User" >
+    update EIP_PROJ.CAS_USER
+    set STATUS = #{status,jdbcType=VARCHAR},
+      CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      CREATOR_ID = #{creatorId,jdbcType=VARCHAR},
+      CREATOR_NAME = #{creatorName,jdbcType=VARCHAR},
+      MODIFY_TIME = #{modifyTime,jdbcType=TIMESTAMP},
+      MODIFIER_ID = #{modifierId,jdbcType=VARCHAR},
+      MODIFIER_NAME = #{modifierName,jdbcType=VARCHAR},
+      IS_APPROVE = #{isApprove,jdbcType=VARCHAR},
+      IS_ACTIVE = #{isActive,jdbcType=VARCHAR},
+      APPROVE_TIME = #{approveTime,jdbcType=TIMESTAMP},
+      APPROVER_ID = #{approverId,jdbcType=VARCHAR},
+      APPROVER_NAME = #{approverName,jdbcType=VARCHAR},
+      USER_CODE = #{userCode,jdbcType=VARCHAR},
+      USER_NAME = #{userName,jdbcType=VARCHAR},
+      USER_PWD = #{userPwd,jdbcType=VARCHAR},
+      USER_REAL = #{userReal,jdbcType=VARCHAR},
+      USER_TYPE = #{userType,jdbcType=VARCHAR},
+      GENDER = #{gender,jdbcType=VARCHAR},
+      ORG_ID = #{orgId,jdbcType=VARCHAR},
+      ORG_NAME = #{orgName,jdbcType=VARCHAR},
+      DEPT_ID = #{deptId,jdbcType=VARCHAR},
+      DEPT_NAME = #{deptName,jdbcType=VARCHAR},
+      MAIL = #{mail,jdbcType=VARCHAR},
+      TEL = #{tel,jdbcType=VARCHAR},
+      MOBILE = #{mobile,jdbcType=VARCHAR},
+      CER_TYPE = #{cerType,jdbcType=VARCHAR},
+      CER_NO = #{cerNo,jdbcType=VARCHAR},
+      CIQ_CODE = #{ciqCode,jdbcType=VARCHAR},
+      CUSTOMS_CODE = #{customsCode,jdbcType=VARCHAR},
+      CNCA_CODE = #{cncaCode,jdbcType=VARCHAR},
+      TECH_REG_CODE = #{techRegCode,jdbcType=VARCHAR},
+      NET_TYPE = #{netType,jdbcType=VARCHAR},
+      NATIONALITY = #{nationality,jdbcType=VARCHAR},
+      BIRTH_DATE = #{birthDate,jdbcType=TIMESTAMP},
+      ADDRESS = #{address,jdbcType=VARCHAR},
+      PICTURE_ID = #{pictureId,jdbcType=VARCHAR},
+      CIQ_ORIGIN_NO = #{ciqOriginNo,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="purple.cas.mapper.AuthCodeMapper" >
+  <resultMap id="BaseResultMap" type="purple.cas.model.AuthCode" >
+    <id column="AUTH_CODE" property="authCode" jdbcType="VARCHAR" />
+    <result column="CLIENT_ID" property="clientId" jdbcType="VARCHAR" />
+    <result column="USER_NAME" property="userName" jdbcType="VARCHAR" />
+    <result column="IMPL_TYPE" property="implType" jdbcType="VARCHAR" />
+    <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    AUTH_CODE, CLIENT_ID, USER_NAME, IMPL_TYPE, CREATE_TIME
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from EIP_PROJ.CAS_AUTH_CODE
+    where AUTH_CODE = #{authCode,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from EIP_PROJ.CAS_AUTH_CODE
+    where AUTH_CODE = #{authCode,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="purple.cas.model.AuthCode" >
+    insert into EIP_PROJ.CAS_AUTH_CODE (AUTH_CODE, CLIENT_ID, USER_NAME, 
+      IMPL_TYPE, CREATE_TIME)
+    values (#{authCode,jdbcType=VARCHAR}, #{clientId,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, 
+      #{implType,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="purple.cas.model.AuthCode" >
+    insert into EIP_PROJ.CAS_AUTH_CODE
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="authCode != null" >
+        AUTH_CODE,
+      </if>
+      <if test="clientId != null" >
+        CLIENT_ID,
+      </if>
+      <if test="userName != null" >
+        USER_NAME,
+      </if>
+      <if test="implType != null" >
+        IMPL_TYPE,
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="authCode != null" >
+        #{authCode,jdbcType=VARCHAR},
+      </if>
+      <if test="clientId != null" >
+        #{clientId,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null" >
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="implType != null" >
+        #{implType,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="purple.cas.model.AuthCode" >
+    update EIP_PROJ.CAS_AUTH_CODE
+    <set >
+      <if test="clientId != null" >
+        CLIENT_ID = #{clientId,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null" >
+        USER_NAME = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="implType != null" >
+        IMPL_TYPE = #{implType,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where AUTH_CODE = #{authCode,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="purple.cas.model.AuthCode" >
+    update EIP_PROJ.CAS_AUTH_CODE
+    set CLIENT_ID = #{clientId,jdbcType=VARCHAR},
+      USER_NAME = #{userName,jdbcType=VARCHAR},
+      IMPL_TYPE = #{implType,jdbcType=VARCHAR},
+      CREATE_TIME = #{createTime,jdbcType=TIMESTAMP}
+    where AUTH_CODE = #{authCode,jdbcType=VARCHAR}
+  </update>
+</mapper>

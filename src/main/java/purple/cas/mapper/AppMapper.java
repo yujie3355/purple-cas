@@ -2,10 +2,16 @@ package purple.cas.mapper;
 
 import purple.cas.model.App;
 
-/**
- * Created by yujie on 2017/12/12.
- */
 public interface AppMapper {
+    int deleteByPrimaryKey(String id);
 
-    App getById(String id);
+    int insert(App record);
+
+    int insertSelective(App record);
+
+    App selectByPrimaryKey(String id);
+
+    int updateByPrimaryKeySelective(App record);
+
+    int updateByPrimaryKey(App record);
 }

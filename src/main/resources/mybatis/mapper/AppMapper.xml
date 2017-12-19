@@ -1,33 +1,319 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="purple.cas.mapper.AppMapper" >
-
-    <resultMap type="purple.cas.model.App" id="BaseResultMap">
-        <result property="id" column="id" />
-        <result property="appCode" column="app_code" />
-        <result property="appName" column="app_name" />
-        <result property="redirectUri" column="redirect_uri" />
-        <result property="createTime" column="create_time" jdbcType="DATE"/>
-        <result property="modifyTime" column="modify_time" jdbcType="DATE"/>
-    </resultMap>
-
-    <sql id="Tabel_Name">
-        sys_app
-    </sql>
-
-    <sql id="Base_Column_List" >
-        id,app_code,app_name,redirect_uri,create_time,modify_time
-    </sql>
-
-    <select id="getById" resultMap="BaseResultMap" parameterType="String">
-        select
-        <include refid="Base_Column_List" />
-        from
-        <include refid="Tabel_Name" />
-        where
-        id = #{id}
-    </select>
-
-</mapper>     
+  <resultMap id="BaseResultMap" type="purple.cas.model.App" >
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="STATUS" property="status" jdbcType="VARCHAR" />
+    <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="CREATOR_ID" property="creatorId" jdbcType="VARCHAR" />
+    <result column="MODIFY_TIME" property="modifyTime" jdbcType="TIMESTAMP" />
+    <result column="MODIFIER_ID" property="modifierId" jdbcType="VARCHAR" />
+    <result column="APP_CODE" property="appCode" jdbcType="VARCHAR" />
+    <result column="APP_NAME" property="appName" jdbcType="VARCHAR" />
+    <result column="APP_REMARK" property="appRemark" jdbcType="VARCHAR" />
+    <result column="APP_ICON" property="appIcon" jdbcType="VARCHAR" />
+    <result column="APP_URL" property="appUrl" jdbcType="VARCHAR" />
+    <result column="IS_SHOW" property="isShow" jdbcType="VARCHAR" />
+    <result column="IS_ENABLE" property="isEnable" jdbcType="VARCHAR" />
+    <result column="REDIRECT_URI" property="redirectUri" jdbcType="VARCHAR" />
+    <result column="CAS_SECRET" property="casSecret" jdbcType="VARCHAR" />
+    <result column="OSI_IS_OPEN" property="osiIsOpen" jdbcType="VARCHAR" />
+    <result column="OSI_BASE_ADDRESS" property="osiBaseAddress" jdbcType="VARCHAR" />
+    <result column="OSI_SORT" property="osiSort" jdbcType="VARCHAR" />
+    <result column="OSI_REMARK" property="osiRemark" jdbcType="VARCHAR" />
+    <result column="OSI_SECRET" property="osiSecret" jdbcType="VARCHAR" />
+    <result column="UCS_MENU_URL" property="ucsMenuUrl" jdbcType="VARCHAR" />
+    <result column="MSS_URL" property="mssUrl" jdbcType="VARCHAR" />
+    <result column="MSS_MOBILE" property="mssMobile" jdbcType="VARCHAR" />
+    <result column="CAS_LOGIN_VIEW" property="casLoginView" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, STATUS, CREATE_TIME, CREATOR_ID, MODIFY_TIME, MODIFIER_ID, APP_CODE, APP_NAME, 
+    APP_REMARK, APP_ICON, APP_URL, IS_SHOW, IS_ENABLE, REDIRECT_URI, CAS_SECRET, OSI_IS_OPEN, 
+    OSI_BASE_ADDRESS, OSI_SORT, OSI_REMARK, OSI_SECRET, UCS_MENU_URL, MSS_URL, MSS_MOBILE, 
+    CAS_LOGIN_VIEW
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from EIP_PROJ.SYS_APP
+    where ID = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from EIP_PROJ.SYS_APP
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="purple.cas.model.App" >
+    insert into EIP_PROJ.SYS_APP (ID, STATUS, CREATE_TIME, 
+      CREATOR_ID, MODIFY_TIME, MODIFIER_ID, 
+      APP_CODE, APP_NAME, APP_REMARK, 
+      APP_ICON, APP_URL, IS_SHOW, 
+      IS_ENABLE, REDIRECT_URI, CAS_SECRET, 
+      OSI_IS_OPEN, OSI_BASE_ADDRESS, OSI_SORT, 
+      OSI_REMARK, OSI_SECRET, UCS_MENU_URL, 
+      MSS_URL, MSS_MOBILE, CAS_LOGIN_VIEW
+      )
+    values (#{id,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{creatorId,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP}, #{modifierId,jdbcType=VARCHAR}, 
+      #{appCode,jdbcType=VARCHAR}, #{appName,jdbcType=VARCHAR}, #{appRemark,jdbcType=VARCHAR}, 
+      #{appIcon,jdbcType=VARCHAR}, #{appUrl,jdbcType=VARCHAR}, #{isShow,jdbcType=VARCHAR}, 
+      #{isEnable,jdbcType=VARCHAR}, #{redirectUri,jdbcType=VARCHAR}, #{casSecret,jdbcType=VARCHAR}, 
+      #{osiIsOpen,jdbcType=VARCHAR}, #{osiBaseAddress,jdbcType=VARCHAR}, #{osiSort,jdbcType=VARCHAR}, 
+      #{osiRemark,jdbcType=VARCHAR}, #{osiSecret,jdbcType=VARCHAR}, #{ucsMenuUrl,jdbcType=VARCHAR}, 
+      #{mssUrl,jdbcType=VARCHAR}, #{mssMobile,jdbcType=VARCHAR}, #{casLoginView,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="purple.cas.model.App" >
+    insert into EIP_PROJ.SYS_APP
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="status != null" >
+        STATUS,
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME,
+      </if>
+      <if test="creatorId != null" >
+        CREATOR_ID,
+      </if>
+      <if test="modifyTime != null" >
+        MODIFY_TIME,
+      </if>
+      <if test="modifierId != null" >
+        MODIFIER_ID,
+      </if>
+      <if test="appCode != null" >
+        APP_CODE,
+      </if>
+      <if test="appName != null" >
+        APP_NAME,
+      </if>
+      <if test="appRemark != null" >
+        APP_REMARK,
+      </if>
+      <if test="appIcon != null" >
+        APP_ICON,
+      </if>
+      <if test="appUrl != null" >
+        APP_URL,
+      </if>
+      <if test="isShow != null" >
+        IS_SHOW,
+      </if>
+      <if test="isEnable != null" >
+        IS_ENABLE,
+      </if>
+      <if test="redirectUri != null" >
+        REDIRECT_URI,
+      </if>
+      <if test="casSecret != null" >
+        CAS_SECRET,
+      </if>
+      <if test="osiIsOpen != null" >
+        OSI_IS_OPEN,
+      </if>
+      <if test="osiBaseAddress != null" >
+        OSI_BASE_ADDRESS,
+      </if>
+      <if test="osiSort != null" >
+        OSI_SORT,
+      </if>
+      <if test="osiRemark != null" >
+        OSI_REMARK,
+      </if>
+      <if test="osiSecret != null" >
+        OSI_SECRET,
+      </if>
+      <if test="ucsMenuUrl != null" >
+        UCS_MENU_URL,
+      </if>
+      <if test="mssUrl != null" >
+        MSS_URL,
+      </if>
+      <if test="mssMobile != null" >
+        MSS_MOBILE,
+      </if>
+      <if test="casLoginView != null" >
+        CAS_LOGIN_VIEW,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creatorId != null" >
+        #{creatorId,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierId != null" >
+        #{modifierId,jdbcType=VARCHAR},
+      </if>
+      <if test="appCode != null" >
+        #{appCode,jdbcType=VARCHAR},
+      </if>
+      <if test="appName != null" >
+        #{appName,jdbcType=VARCHAR},
+      </if>
+      <if test="appRemark != null" >
+        #{appRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="appIcon != null" >
+        #{appIcon,jdbcType=VARCHAR},
+      </if>
+      <if test="appUrl != null" >
+        #{appUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="isShow != null" >
+        #{isShow,jdbcType=VARCHAR},
+      </if>
+      <if test="isEnable != null" >
+        #{isEnable,jdbcType=VARCHAR},
+      </if>
+      <if test="redirectUri != null" >
+        #{redirectUri,jdbcType=VARCHAR},
+      </if>
+      <if test="casSecret != null" >
+        #{casSecret,jdbcType=VARCHAR},
+      </if>
+      <if test="osiIsOpen != null" >
+        #{osiIsOpen,jdbcType=VARCHAR},
+      </if>
+      <if test="osiBaseAddress != null" >
+        #{osiBaseAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="osiSort != null" >
+        #{osiSort,jdbcType=VARCHAR},
+      </if>
+      <if test="osiRemark != null" >
+        #{osiRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="osiSecret != null" >
+        #{osiSecret,jdbcType=VARCHAR},
+      </if>
+      <if test="ucsMenuUrl != null" >
+        #{ucsMenuUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="mssUrl != null" >
+        #{mssUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="mssMobile != null" >
+        #{mssMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="casLoginView != null" >
+        #{casLoginView,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="purple.cas.model.App" >
+    update EIP_PROJ.SYS_APP
+    <set >
+      <if test="status != null" >
+        STATUS = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creatorId != null" >
+        CREATOR_ID = #{creatorId,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        MODIFY_TIME = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierId != null" >
+        MODIFIER_ID = #{modifierId,jdbcType=VARCHAR},
+      </if>
+      <if test="appCode != null" >
+        APP_CODE = #{appCode,jdbcType=VARCHAR},
+      </if>
+      <if test="appName != null" >
+        APP_NAME = #{appName,jdbcType=VARCHAR},
+      </if>
+      <if test="appRemark != null" >
+        APP_REMARK = #{appRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="appIcon != null" >
+        APP_ICON = #{appIcon,jdbcType=VARCHAR},
+      </if>
+      <if test="appUrl != null" >
+        APP_URL = #{appUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="isShow != null" >
+        IS_SHOW = #{isShow,jdbcType=VARCHAR},
+      </if>
+      <if test="isEnable != null" >
+        IS_ENABLE = #{isEnable,jdbcType=VARCHAR},
+      </if>
+      <if test="redirectUri != null" >
+        REDIRECT_URI = #{redirectUri,jdbcType=VARCHAR},
+      </if>
+      <if test="casSecret != null" >
+        CAS_SECRET = #{casSecret,jdbcType=VARCHAR},
+      </if>
+      <if test="osiIsOpen != null" >
+        OSI_IS_OPEN = #{osiIsOpen,jdbcType=VARCHAR},
+      </if>
+      <if test="osiBaseAddress != null" >
+        OSI_BASE_ADDRESS = #{osiBaseAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="osiSort != null" >
+        OSI_SORT = #{osiSort,jdbcType=VARCHAR},
+      </if>
+      <if test="osiRemark != null" >
+        OSI_REMARK = #{osiRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="osiSecret != null" >
+        OSI_SECRET = #{osiSecret,jdbcType=VARCHAR},
+      </if>
+      <if test="ucsMenuUrl != null" >
+        UCS_MENU_URL = #{ucsMenuUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="mssUrl != null" >
+        MSS_URL = #{mssUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="mssMobile != null" >
+        MSS_MOBILE = #{mssMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="casLoginView != null" >
+        CAS_LOGIN_VIEW = #{casLoginView,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="purple.cas.model.App" >
+    update EIP_PROJ.SYS_APP
+    set STATUS = #{status,jdbcType=VARCHAR},
+      CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      CREATOR_ID = #{creatorId,jdbcType=VARCHAR},
+      MODIFY_TIME = #{modifyTime,jdbcType=TIMESTAMP},
+      MODIFIER_ID = #{modifierId,jdbcType=VARCHAR},
+      APP_CODE = #{appCode,jdbcType=VARCHAR},
+      APP_NAME = #{appName,jdbcType=VARCHAR},
+      APP_REMARK = #{appRemark,jdbcType=VARCHAR},
+      APP_ICON = #{appIcon,jdbcType=VARCHAR},
+      APP_URL = #{appUrl,jdbcType=VARCHAR},
+      IS_SHOW = #{isShow,jdbcType=VARCHAR},
+      IS_ENABLE = #{isEnable,jdbcType=VARCHAR},
+      REDIRECT_URI = #{redirectUri,jdbcType=VARCHAR},
+      CAS_SECRET = #{casSecret,jdbcType=VARCHAR},
+      OSI_IS_OPEN = #{osiIsOpen,jdbcType=VARCHAR},
+      OSI_BASE_ADDRESS = #{osiBaseAddress,jdbcType=VARCHAR},
+      OSI_SORT = #{osiSort,jdbcType=VARCHAR},
+      OSI_REMARK = #{osiRemark,jdbcType=VARCHAR},
+      OSI_SECRET = #{osiSecret,jdbcType=VARCHAR},
+      UCS_MENU_URL = #{ucsMenuUrl,jdbcType=VARCHAR},
+      MSS_URL = #{mssUrl,jdbcType=VARCHAR},
+      MSS_MOBILE = #{mssMobile,jdbcType=VARCHAR},
+      CAS_LOGIN_VIEW = #{casLoginView,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>
