@@ -3,12 +3,8 @@ package purple.cas.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import purple.cas.constant.ResponseType;
-import purple.cas.mapper.AppMapper;
-import purple.cas.mapper.AuthCodeMapper;
-import purple.cas.mapper.UserMapper;
-import purple.cas.model.App;
-import purple.cas.model.AuthCode;
-import purple.cas.model.User;
+import purple.cas.mapper.*;
+import purple.cas.model.*;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -25,14 +21,18 @@ public class OAuthService {
 
     @Autowired
     AppMapper appMapper;
-    //test
 
     @Autowired
     UserMapper userMapper;
 
-
     @Autowired
     AuthCodeMapper authCodeMapper;
+
+    @Autowired
+    AuthTokenMapper authTokenMapper;
+
+
+
 
 
 
@@ -129,9 +129,33 @@ public class OAuthService {
 
 
 
-    public void token(String clientId, String redirectUri, String responseType, String state, String code) {
+    public AuthToken token(String clientId, String clientSecret, String code) throws Exception {
 
+        AuthCode authCode = authCodeMapper.selectByPrimaryKey(code);
+        if(null == authCode)
+            throw new Exception("OAuth.token.AuthCode is missing.Detail-" + code);
 
+        App app = appMapper.selectByPrimaryKey(clientId);
+        if(null == app)
+            throw new Exception("OAuth.token.App is missing.Detail-" + clientId);
+
+        if(clientSecret.equals(app.getCasSecret()))
+            throw new Exception("OAuth.token.App's cas secret is not correct.Detail-" + clientId);
+
+        String token = UUID.randomUUID().toString().replace("-", "").toUpperCase();
+        String refreshToken = UUID.randomUUID().toString().replace("-", "").toUpperCase();
+        AuthToken authToken = new AuthToken();
+
+        authToken.setUserName(authCode.getUserName());
+        authToken.setImplType("oraclebase");
+        authToken.setCreateTime(LocalDateTime.now());
+        authToken.setClientId(authCode.getClientId());
+        authToken.setAccessToken(token);
+        authToken.setAuthCode(code);
+        authToken.setRefreshToken(refreshToken);
+        authTokenMapper.insert(authToken);
+
+        return  authToken;
 
     }
 }
