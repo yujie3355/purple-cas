@@ -63,12 +63,14 @@ public class OAuthController {
                        @RequestParam(value="redirect_uri", required=true) String redirectUri,
                        @RequestParam(value="response_type", required=true) String responseType,
                        @RequestParam(value="state", required=true, defaultValue="code") String state,
+                       @RequestParam(value="warn_info", required=false, defaultValue = "0") String warnInfo,
                        Model model) {
 
-        model.addAttribute("client_id",clientId);
-        model.addAttribute("redirect_uri",redirectUri);
-        model.addAttribute("response_type",responseType);
-        model.addAttribute("state",state);
+        model.addAttribute("client_id", clientId);
+        model.addAttribute("redirect_uri", redirectUri);
+        model.addAttribute("response_type", responseType);
+        model.addAttribute("state", state);
+        model.addAttribute("warn_info", warnInfo);
 
         model.addAttribute("appRootPath", AppUtils.getPageRootPath(2));
 
@@ -84,6 +86,7 @@ public class OAuthController {
                         @RequestParam(value="redirect_uri", required=true) String redirectUri,
                         @RequestParam(value="response_type", required=true) String responseType,
                         @RequestParam(value="state", required=true) String state,
+                        @RequestParam(value="warn_info", required=false, defaultValue = "0") String warnInfo,
                         Model model) throws Exception {
 
         oAuthService.authorize(clientId, redirectUri, responseType, state);
@@ -100,36 +103,23 @@ public class OAuthController {
             model.addAttribute("response_type",responseType);
             model.addAttribute("state",state);
             model.addAttribute("user_name",userName);
-
+            model.addAttribute("warn_info","1");
             return "oauth-show";
-
-
         }
     }
 
-
-
-
-
-
     @RequestMapping(value = "/token", method = RequestMethod.GET)
     @ResponseBody
-    public AuthToken token(@RequestParam(value="client_id", required=true, defaultValue="1234567890") String clientId,
-                           @RequestParam(value="client_secret", required=true, defaultValue="http://localhost/test") String redirectUri,
-                           @RequestParam(value="redirect_uri", required=true, defaultValue="redirect_uri") String responseType,
-                           @RequestParam(value="grant_type", required=true, defaultValue="grant_type") String state,
-                           @RequestParam(value="code", required=true, defaultValue="code") String code)
-    {
+    public AuthToken token(@RequestParam(value="client_id", required=true) String clientId,
+                           @RequestParam(value="client_secret", required=true) String clientSecret,
+                           @RequestParam(value="redirect_uri", required=true) String redirectUri,
+                           @RequestParam(value="grant_type", required=true) String grantType,
+                           @RequestParam(value="code", required=true) String code) throws Exception {
 
-
-        oAuthService.token(clientId,redirectUri,responseType, state, code);
-
-
-        AuthToken token = new AuthToken();
-        return token;
+        AuthToken authToken = oAuthService.token(clientId,clientSecret, code);
+        return authToken;
 
     }
-
 
 }
 
