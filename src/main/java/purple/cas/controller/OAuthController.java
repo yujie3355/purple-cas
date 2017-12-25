@@ -14,8 +14,12 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import purple.cas.model.AuthToken;
 import purple.cas.service.OAuthService;
+import purple.cas.utils.AppUtils;
 
+import javax.servlet.GenericServlet;
 import javax.servlet.http.HttpServletRequest;
+
+import static org.springframework.web.util.WebUtils.getRealPath;
 
 /**
  * Created by yujie on 2017/12/12.
@@ -65,6 +69,9 @@ public class OAuthController {
         model.addAttribute("redirect_uri",redirectUri);
         model.addAttribute("response_type",responseType);
         model.addAttribute("state",state);
+
+        model.addAttribute("appRootPath", AppUtils.getPageRootPath(2));
+
 
         return "oauth-show";
     }
